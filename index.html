@@ -13,10 +13,10 @@
 
     <div class="editor-container">
       <div class="editor-wrapper">
-        <textarea id="editor" class="editor"></textarea>
+        <textarea id="editor" class="editor" wrap="off"></textarea>
 
         <div class="line-numbers-container">
-          <ul id="line-numbers" class="line-numbers"></ul>
+          <div id="line-numbers" class="line-numbers"></div>
         </div>
       </div>
 
@@ -27,8 +27,11 @@
       </div>
     </div>
 
-    <div class="frame-container">
-      <iframe id="frame" class="frame"></iframe>
+    <div class="iframe-container">
+      <iframe id="iframe" class="iframe"></iframe>
+
+      <div id="console" class="console"></div>
+      <div id="clear-console" class="clear-console">Clear</div>
     </div>
 
   </div>
