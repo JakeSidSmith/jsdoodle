@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JS Doodle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css" media="screen" title="no title" charset="utf-8" />
+  <script charset="utf-8" type="text/javascript" src="js/jsdoodle.js"></script>
+</head>
+<body>
+
+  <div class="wrapper">
+
+    <div class="editor-container">
+      <div class="editor-wrapper">
+        <textarea id="editor" class="editor"></textarea>
+
+        <div class="line-numbers-container">
+          <ul id="line-numbers" class="line-numbers"></ul>
+        </div>
+      </div>
+
+      <div class="menu">
+        <ul class="controls right">
+          <li id="run-button" title="Execute your script">Run</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="frame-container">
+      <iframe id="frame" class="frame"></iframe>
+    </div>
+
+  </div>
+
+  <script charset="utf-8" type="text/javascript">
+    jsdoodle.init();
+  </script>
+
+</body>
+</html>
