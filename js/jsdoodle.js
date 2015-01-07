@@ -43,6 +43,7 @@ localStorage.setItem(name, value);
 
   var pushToIframe = function () {
     iframeDocument.body.innerHTML = '';
+    iframeDocument.head.innerHTML = '';
 
     var script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
