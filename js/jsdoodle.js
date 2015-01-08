@@ -86,26 +86,8 @@ localStorage.setItem(name, value);
     editor.style.paddingLeft = (lineNumbers.parentNode.offsetWidth + 8) + 'px';
   };
 
-  var handleRuntimeError = function (event) {
-    event.preventDefault();
-    iframeWindow.console.error(event.message + (event.lineno ? ' at line: ' + event.lineno : ''));
-  };
-
   var clearConsole = function () {
     jsConsole.innerHTML = '';
-  };
-
-  var addListeners = function () {
-    editor.addEventListener('scroll', function () {
-      lineNumbers.style.marginTop = - editor.scrollTop + 'px';
-    }, false);
-    editor.addEventListener('change', editorChanged);
-    editor.addEventListener('input', editorChanged);
-    runButton.addEventListener('click', pushToIframe);
-    clearConsoleButton.addEventListener('click', clearConsole);
-    window.addEventListener('keypress', ctrlAndEnter);
-    iframeWindow.addEventListener('keypress', ctrlAndEnter);
-    iframeWindow.addEventListener('error', handleRuntimeError);
   };
 
   var argsToArray = function (args) {
@@ -139,6 +121,31 @@ localStorage.setItem(name, value);
     overrideConsoleMethod('warn');
     overrideConsoleMethod('error');
   };
+
+  var handleRuntimeError = function (event) {
+    event.preventDefault();
+    var lineNumber = '';
+    if (event.lineno) {
+      lineNumber = ' at line: ' + event.lineno;
+    } else if (event.lineNumber) {
+      lineNumber = ' at line: ' + event.lineNumber;
+    }
+    iframeWindow.console.error(event.message + lineNumber);
+  };
+
+  var addListeners = function () {
+    editor.addEventListener('scroll', function () {
+      lineNumbers.style.marginTop = - editor.scrollTop + 'px';
+    }, false);
+    editor.addEventListener('change', editorChanged);
+    editor.addEventListener('input', editorChanged);
+    runButton.addEventListener('click', pushToIframe);
+    clearConsoleButton.addEventListener('click', clearConsole);
+    window.addEventListener('keypress', ctrlAndEnter);
+    iframeWindow.addEventListener('keypress', ctrlAndEnter);
+    iframeWindow.addEventListener('error', handleRuntimeError);
+  };
+
 
   var jsdoodle = {
     init: function () {
