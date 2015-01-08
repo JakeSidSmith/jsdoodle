@@ -87,7 +87,8 @@ localStorage.setItem(name, value);
   };
 
   var handleRuntimeError = function (event) {
-    iframeWindow.console.error(event.message);
+    event.preventDefault();
+    iframeWindow.console.error(event.message + (event.lineno ? ' at line: ' + event.lineno : ''));
   };
 
   var clearConsole = function () {
@@ -155,7 +156,7 @@ localStorage.setItem(name, value);
 
       // Initialize editor padding and subsequently add the first line number
       editorChanged();
-      
+
       editor.focus();
     }
   };
