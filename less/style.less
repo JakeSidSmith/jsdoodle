@@ -6,6 +6,11 @@
 @LineNumberColor: #777;
 @BorderColor: #CCC;
 
+@InfoBlue: #66EEFF;
+@WarnOrange: #EEAA55;
+@ErrorRed: #EE5555;
+
+@ConsoleHeight: 72px;
 @MenuHeight: 36px;
 @PaddingSize: 8px;
 
@@ -45,9 +50,10 @@ html, body {
   padding-bottom: @MenuHeight;
 }
 
-.frame-container {
+.iframe-container {
   .container;
   top: 0;
+  padding-bottom: 72px;
 }
 
 .editor-wrapper {
@@ -56,7 +62,7 @@ html, body {
   height: 100%;
 }
 
-.editor-frame {
+.editor-iframe {
   position: absolute;
   overflow: auto;
   width: 100%;
@@ -72,22 +78,64 @@ html, body {
 }
 
 .editor {
-  .editor-frame;
+  .editor-iframe;
   .editor-text;
   padding: @PaddingSize;
   padding-left: 25 + @PaddingSize;
   outline: none;
   color: @EditorFontColor;
   background-color: @EditorBackground;
-  white-space: nowrap;
   max-width: 100%;
   max-height: 100%;
   min-width: 100%;
   min-height: 100%;
 }
 
-.frame {
-  .editor-frame;
+.iframe {
+  .editor-iframe;
+  position: relative;
+}
+
+.console {
+  position: absolute;
+  width: 100%;
+  height: @ConsoleHeight;
+  left: 0;
+  bottom: 0;
+  background-color: @EditorBackground;
+  color: @EditorFontColor;
+  padding: @PaddingSize;
+  overflow: auto;
+  font-family: monospace, monospaced;
+  font-size: 14px;
+  line-height: 16px;
+
+  p {
+    padding: 0;
+    margin: 0;
+
+    &.info {
+      color: @InfoBlue;
+    }
+
+    &.warn {
+      color: @WarnOrange;
+    }
+
+    &.error {
+      color: @ErrorRed;
+    }
+  }
+}
+
+.clear-console {
+  position: absolute;
+  padding: @PaddingSize;
+  height: 24px;
+  bottom: @ConsoleHeight - 24px;
+  right: 0;
+  font-family: arial, helvetica, sans-serif;
+  color: @EditorFontColor;
 }
 
 .line-numbers-container {
@@ -104,12 +152,6 @@ html, body {
   text-align: right;
 
   .line-numbers {
-    top: 0;
-    left: 0;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
     li {
       display: block;
     }
@@ -154,7 +196,7 @@ html, body {
     border-right: 1px solid @BorderColor;
   }
 
-  .frame-container {
+  .iframe-container {
     .container;
     left: auto;
     right: 0;
