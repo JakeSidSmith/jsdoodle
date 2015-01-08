@@ -12,6 +12,21 @@ localStorage.setItem(name, value);
 
   var lineNumberCount = 0;
 
+  // Faster innerHTML replacement
+  var replaceHTML = function (element, html) {
+    var oldElement = typeof el === 'string' ? document.getElementById(element) : element;
+    /*@cc_on // Pure innerHTML is slightly faster in IE
+    oldElement.innerHTML = html;
+    return oldEl;
+    @*/
+    var newElement = oldElement.cloneNode(false);
+    newElement.innerHTML = html;
+    oldElement.parentNode.replaceChild(newElement, oldElement);
+    /* Since we just removed the old element from the DOM, return a reference
+    to the new element, which can be used to restore variable references. */
+    return newElement;
+  };
+
   var replaceLastNumbers = function (value, match, number) {
     var lastIndex = value.lastIndexOf(match);
 
@@ -33,11 +48,11 @@ localStorage.setItem(name, value);
       lineNumberCount += 1;
     }
 
-    lineNumbers.innerHTML = lineNumbersHTML;
+    lineNumbers = replaceHTML(lineNumbers, lineNumbersHTML);
   };
 
   var removeLineNumbers = function (number) {
-    lineNumbers.innerHTML = replaceLastNumbers(lineNumbers.innerHTML, '<br>', number);
+    lineNumbers = replaceHTML(lineNumbers, replaceLastNumbers(lineNumbers.innerHTML, '<br>', number));
     lineNumberCount -= number;
   };
 
@@ -140,7 +155,7 @@ localStorage.setItem(name, value);
 
       // Initialize editor padding and subsequently add the first line number
       editorChanged();
-
+      
       editor.focus();
     }
   };
