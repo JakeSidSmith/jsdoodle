@@ -1,5 +1,6 @@
 // out:../css/style.css, compress:true
 
+@White: #FFFFFF;
 @FontColor: #333;
 @EditorFontColor: #DDD;
 @EditorBackground: #222;
@@ -11,7 +12,6 @@
 @ErrorRed: #EE5555;
 
 @ConsoleHeight: 100%;
-@MenuHeight: 36px;
 @PaddingSize: 8px;
 
 .transition(@value) {
@@ -56,7 +56,6 @@ html, body {
   .container;
   bottom: 0;
   border-top: 1px solid @BorderColor;
-  padding-bottom: @MenuHeight;
 }
 
 .iframe-container {
@@ -99,10 +98,56 @@ html, body {
   min-height: 100%;
 }
 
+.editor-container {
+
+  .settings {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    left: 0;
+    background-color: @White;
+    .transition(ease-in-out 0.2s top);
+
+    .settings-run {
+      position: absolute;
+      top: -@PaddingSize * 4;
+      padding: @PaddingSize;
+      color: @EditorFontColor;
+    }
+
+    .settings-button {
+      .settings-run;
+      left: 0;
+    }
+
+    .run-button {
+      .settings-run;
+      right: 0;
+    }
+  }
+
+  &.settings-active {
+    .settings {
+      top: 0;
+    }
+
+    .settings-run {
+      top: 0;
+      color: @FontColor;
+    }
+
+    .settings-button,
+    .run-button {
+      .settings-run;
+    }
+  }
+
+}
+
 .iframe {
   .editor-iframe;
   position: relative;
-  .transition(ease-in-out 0.2s height);
 }
 
 .iframe-container {
@@ -175,10 +220,6 @@ html, body {
   }
 
   &.console-active {
-    .iframe {
-      height: 0;
-    }
-
     .console-container {
       top: 0;
 
@@ -220,28 +261,7 @@ html, body {
   }
 }
 
-.menu {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  height: @MenuHeight;
-  border-top: 1px solid @BorderColor;
-}
 
-.controls {
-  height: @MenuHeight - 1px;
-  list-style: none;
-  padding: @PaddingSize;
-  margin: 0;
-
-  &.right {
-    float: right;
-
-    li {
-      float: right;
-    }
-  }
-}
 
 @media all and (min-width: 768px) {
 

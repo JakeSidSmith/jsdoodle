@@ -9,8 +9,10 @@ localStorage.setItem(name, value);
 (function () {
 
   var editor,
+  editorContainer,
   lineNumbers,
   runButton,
+  settingsButton,
   iframeContainer,
   iframe,
   iframeDocument,
@@ -185,6 +187,14 @@ localStorage.setItem(name, value);
     }
   };
 
+  var toggleSettings = function () {
+    if (hasClass(editorContainer, 'settings-active')) {
+      removeClass(editorContainer, 'settings-active');
+    } else {
+      addClass(editorContainer, 'settings-active');
+    }
+  };
+
   var addListeners = function () {
     editor.addEventListener('scroll', function () {
       lineNumbers.style.marginTop = - editor.scrollTop + 'px';
@@ -192,6 +202,7 @@ localStorage.setItem(name, value);
     editor.addEventListener('change', editorChanged);
     editor.addEventListener('input', editorChanged);
     runButton.addEventListener('click', pushToIframe);
+    settingsButton.addEventListener('click', toggleSettings);
     clearConsoleButton.addEventListener('click', clearConsole);
     window.addEventListener('keypress', ctrlAndEnter);
     iframeWindow.addEventListener('keypress', ctrlAndEnter);
@@ -203,8 +214,10 @@ localStorage.setItem(name, value);
   var jsdoodle = {
     init: function () {
       editor = document.getElementById('editor');
+      editorContainer = document.getElementById('editor-container');
       lineNumbers = document.getElementById('line-numbers');
       runButton = document.getElementById('run-button');
+      settingsButton = document.getElementById('settings-button');
       iframeContainer = document.getElementById('iframe-container');
       iframe = document.getElementById('iframe');
       jsConsole = document.getElementById('console');
