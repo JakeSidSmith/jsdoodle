@@ -102,11 +102,10 @@ html, body {
 .iframe {
   .editor-iframe;
   position: relative;
+  .transition(ease-in-out 0.2s height);
 }
 
 .iframe-container {
-  .transition(ease-in-out 0.2s padding-bottom);
-
   .console-container {
     position: absolute;
     width: 100%;
@@ -177,7 +176,7 @@ html, body {
 
   &.console-active {
     .iframe {
-      padding-bottom: @ConsoleHeight;
+      height: 0;
     }
 
     .console-container {
