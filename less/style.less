@@ -6,7 +6,7 @@
 @LineNumberColor: #777;
 @BorderColor: #CCC;
 
-@InfoBlue: #66EEFF;
+@InfoBlue: #5599ee;
 @WarnOrange: #EEAA55;
 @ErrorRed: #EE5555;
 
@@ -146,17 +146,30 @@ html, body {
     p {
       padding: 0;
       margin: 0;
+      margin-bottom: 4px;
+      padding-left: 20px;
+
+      &.info,
+      &.warn,
+      &.error {
+        background-position: 0 1px;
+        background-repeat: no-repeat;
+        background-size: auto;
+      }
 
       &.info {
         color: @InfoBlue;
+        background-image: url(../img/badge-info.png);
       }
 
       &.warn {
         color: @WarnOrange;
+        background-image: url(../img/badge-warn.png);
       }
 
       &.error {
         color: @ErrorRed;
+        background-image: url(../img/badge-error.png);
       }
     }
   }
