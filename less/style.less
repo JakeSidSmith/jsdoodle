@@ -10,7 +10,7 @@
 @WarnOrange: #EEAA55;
 @ErrorRed: #EE5555;
 
-@ConsoleHeight: 72px;
+@ConsoleHeight: 100%;
 @MenuHeight: 36px;
 @PaddingSize: 8px;
 
@@ -112,16 +112,16 @@ html, body {
     width: 100%;
     height: @ConsoleHeight;
     left: 0;
-    bottom: 0;
-    margin-bottom: -@ConsoleHeight;
+    top: @ConsoleHeight;
     background-color: @EditorBackground;
     color: @EditorFontColor;
     padding: @PaddingSize;
+    padding-top: @PaddingSize * 4;
     overflow: visible;
     font-family: monospace, monospaced;
     font-size: 14px;
     line-height: 16px;
-    .transition(ease-in-out 0.2s margin-bottom);
+    .transition(ease-in-out 0.2s top);
 
     .console {
       position: relative;
@@ -133,6 +133,7 @@ html, body {
     .console-toggle {
       position: absolute;
       bottom: @ConsoleHeight;
+      top: -@PaddingSize * 4;
       right: 0;
       padding: @PaddingSize;
       color: @FontColor;
@@ -175,10 +176,17 @@ html, body {
   }
 
   &.console-active {
-    padding-bottom: @ConsoleHeight;
+    .iframe {
+      padding-bottom: @ConsoleHeight;
+    }
 
     .console-container {
-      margin-bottom: 0;
+      top: 0;
+
+      .console-toggle {
+        top: 0;
+        color: @EditorFontColor;
+      }
     }
   }
 
@@ -187,9 +195,8 @@ html, body {
 .clear-console {
   position: absolute;
   padding: @PaddingSize;
-  height: 24px;
   top: 0;
-  right: 0;
+  left: 0;
   font-family: arial, helvetica, sans-serif;
   color: @EditorFontColor;
 }
