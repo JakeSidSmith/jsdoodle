@@ -121,6 +121,10 @@
   var clearConsole = function () {
     setErrorCount(0);
     jsConsole.innerHTML = '';
+
+    if (window.console.clear) {
+      window.console.clear();
+    }
   };
 
   var argsToArray = function (args) {
