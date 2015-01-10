@@ -90,6 +90,8 @@
   };
 
   var pushToIframe = function () {
+    removeIframeListeners();
+    
     iframe.addEventListener('load', iframeLoaded);
 
     iframeWindow.location.reload();
@@ -106,7 +108,7 @@
     if (localStorage) {
       localStorage.setItem('previousProject', editor.value);
     }
-    
+
     var lineCount = editor.value.split(/\n|\r|\r\n|\n\r/).length;
 
     if (lineCount < lineNumberCount) {
@@ -206,6 +208,11 @@
     } else {
       addClass(editorContainer, 'settings-active');
     }
+  };
+
+  var removeIframeListeners = function () {
+    iframeWindow.removeEventListener('keypress', ctrlAndEnter);
+    iframeWindow.removeEventListener('error', handleRuntimeError);
   };
 
   var addIframeListeners = function () {
