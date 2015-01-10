@@ -1,18 +1,26 @@
 // out:../css/style.css, compress:true
 
+@White: #FFFFFF;
 @FontColor: #333;
 @EditorFontColor: #DDD;
 @EditorBackground: #222;
 @LineNumberColor: #777;
 @BorderColor: #CCC;
 
-@InfoBlue: #66EEFF;
+@InfoBlue: #5599ee;
 @WarnOrange: #EEAA55;
 @ErrorRed: #EE5555;
 
-@ConsoleHeight: 72px;
-@MenuHeight: 36px;
+@ConsoleHeight: 100%;
 @PaddingSize: 8px;
+
+.transition(@value) {
+  -webkit-transition: @value;
+  -moz-transition: @value;
+  -ms-transition: @value;
+  -o-transition: @value;
+  transition: @value;
+}
 
 * {
   box-sizing: border-box;
@@ -41,19 +49,18 @@ html, body {
   width: 100%;
   height: 50%;
   left: 0;
+  overflow: hidden;
 }
 
 .editor-container {
   .container;
   bottom: 0;
   border-top: 1px solid @BorderColor;
-  padding-bottom: @MenuHeight;
 }
 
 .iframe-container {
   .container;
   top: 0;
-  padding-bottom: 72px;
 }
 
 .editor-wrapper {
@@ -91,49 +98,147 @@ html, body {
   min-height: 100%;
 }
 
+.editor-container {
+
+  .settings {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    left: 0;
+    padding: @PaddingSize;
+    padding-top: @PaddingSize * 4;
+    background-color: @White;
+    .transition(ease-in-out 0.2s top);
+
+    .settings-run {
+      position: absolute;
+      top: -@PaddingSize * 4;
+      padding: @PaddingSize;
+      color: @EditorFontColor;
+    }
+
+    .settings-button {
+      .settings-run;
+      left: 0;
+    }
+
+    .run-button {
+      .settings-run;
+      right: 0;
+    }
+  }
+
+  &.settings-active {
+    .settings {
+      top: 0;
+    }
+
+    .settings-run {
+      top: 0;
+      color: @FontColor;
+    }
+
+    .settings-button,
+    .run-button {
+      .settings-run;
+    }
+  }
+
+}
+
 .iframe {
   .editor-iframe;
   position: relative;
 }
 
-.console {
-  position: absolute;
-  width: 100%;
-  height: @ConsoleHeight;
-  left: 0;
-  bottom: 0;
-  background-color: @EditorBackground;
-  color: @EditorFontColor;
-  padding: @PaddingSize;
-  overflow: auto;
-  font-family: monospace, monospaced;
-  font-size: 14px;
-  line-height: 16px;
+.iframe-container {
+  .console-container {
+    position: absolute;
+    width: 100%;
+    height: @ConsoleHeight;
+    left: 0;
+    top: @ConsoleHeight;
+    background-color: @EditorBackground;
+    color: @EditorFontColor;
+    padding: @PaddingSize;
+    padding-top: @PaddingSize * 4;
+    overflow: visible;
+    font-family: monospace, monospaced;
+    font-size: 14px;
+    line-height: 16px;
+    .transition(ease-in-out 0.2s top);
 
-  p {
-    padding: 0;
-    margin: 0;
-
-    &.info {
-      color: @InfoBlue;
+    .console {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
     }
 
-    &.warn {
-      color: @WarnOrange;
+    .console-toggle {
+      position: absolute;
+      bottom: @ConsoleHeight;
+      top: -@PaddingSize * 4;
+      right: 0;
+      padding: @PaddingSize;
+      color: @FontColor;
+      font-family: arial, helvetica, sans-serif;
+
+      .errors {
+        color: @ErrorRed;
+      }
     }
 
-    &.error {
-      color: @ErrorRed;
+    p {
+      padding: 0;
+      margin: 0;
+      margin-bottom: 4px;
+      padding-left: 20px;
+
+      &.info,
+      &.warn,
+      &.error {
+        background-position: 0 1px;
+        background-repeat: no-repeat;
+        background-size: auto;
+      }
+
+      &.info {
+        color: @InfoBlue;
+        background-image: url(../img/badge-info.png);
+      }
+
+      &.warn {
+        color: @WarnOrange;
+        background-image: url(../img/badge-warn.png);
+      }
+
+      &.error {
+        color: @ErrorRed;
+        background-image: url(../img/badge-error.png);
+      }
     }
   }
+
+  &.console-active {
+    .console-container {
+      top: 0;
+
+      .console-toggle {
+        top: 0;
+        color: @EditorFontColor;
+      }
+    }
+  }
+
 }
 
 .clear-console {
   position: absolute;
   padding: @PaddingSize;
-  height: 24px;
-  bottom: @ConsoleHeight - 24px;
-  right: 0;
+  top: 0;
+  left: 0;
   font-family: arial, helvetica, sans-serif;
   color: @EditorFontColor;
 }
@@ -158,28 +263,7 @@ html, body {
   }
 }
 
-.menu {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  height: @MenuHeight;
-  border-top: 1px solid @BorderColor;
-}
 
-.controls {
-  height: @MenuHeight - 1px;
-  list-style: none;
-  padding: @PaddingSize;
-  margin: 0;
-
-  &.right {
-    float: right;
-
-    li {
-      float: right;
-    }
-  }
-}
 
 @media all and (min-width: 768px) {
 

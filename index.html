@@ -11,7 +11,7 @@
 
   <div class="wrapper">
 
-    <div class="editor-container">
+    <div id="editor-container" class="editor-container">
       <div class="editor-wrapper">
         <textarea id="editor" class="editor" wrap="off"></textarea>
 
@@ -20,18 +20,23 @@
         </div>
       </div>
 
-      <div class="menu">
-        <ul class="controls right">
-          <li id="run-button" title="Execute your script">Run</li>
-        </ul>
+      <div class="settings">
+        <div id="settings-button" class="settings-button" title="Configure settings">Settings</div>
+        <div id="run-button" class="run-button" title="Execute your script">Run</div>
       </div>
     </div>
 
-    <div class="iframe-container">
+    <div id="iframe-container" class="iframe-container">
       <iframe id="iframe" class="iframe"></iframe>
 
-      <div id="console" class="console"></div>
-      <div id="clear-console" class="clear-console">Clear</div>
+      <div id="console-container" class="console-container">
+        <div id="console" class="console"></div>
+        <div id="console-toggle" class="console-toggle" title="View console">
+          <span id="errors" class="errors"></span>
+          Console
+        </div>
+        <div id="clear-console" class="clear-console">Clear</div>
+      </div>
     </div>
 
   </div>
