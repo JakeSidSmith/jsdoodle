@@ -1,11 +1,5 @@
 'use strict';
 
-/* NOTES
-
-localStorage.setItem(name, value);
-
-*/
-
 (function () {
 
   var editor,
@@ -79,15 +73,30 @@ localStorage.setItem(name, value);
     lineNumberCount -= number;
   };
 
-  var pushToIframe = function () {
-    iframeDocument.body.innerHTML = '';
-    iframeDocument.head.innerHTML = '';
+  var iframeLoaded = function () {
+    iframe.removeEventListener('load', iframeLoaded);
+
+    iframeWindow = iframe.contentWindow || iframe;
+    iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+    addIframeListeners();
+    overrideConsole();
 
     var script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
     script.innerHTML = editor.value;
 
     iframeDocument.body.insertBefore(script, undefined);
+  };
+
+  var pushToIframe = function () {
+    if (localStorage) {
+      localStorage.setItem('previousProject', editor.value);
+    }
+
+    iframe.addEventListener('load', iframeLoaded);
+
+    iframeWindow.location.reload();
   };
 
   var ctrlAndEnter = function (event) {
@@ -195,6 +204,11 @@ localStorage.setItem(name, value);
     }
   };
 
+  var addIframeListeners = function () {
+    iframeWindow.addEventListener('keypress', ctrlAndEnter);
+    iframeWindow.addEventListener('error', handleRuntimeError);
+  };
+
   var addListeners = function () {
     editor.addEventListener('scroll', function () {
       lineNumbers.style.marginTop = - editor.scrollTop + 'px';
@@ -205,9 +219,8 @@ localStorage.setItem(name, value);
     settingsButton.addEventListener('click', toggleSettings);
     clearConsoleButton.addEventListener('click', clearConsole);
     window.addEventListener('keypress', ctrlAndEnter);
-    iframeWindow.addEventListener('keypress', ctrlAndEnter);
-    iframeWindow.addEventListener('error', handleRuntimeError);
     consoleToggle.addEventListener('click', toggleConsole);
+    addIframeListeners();
   };
 
 
@@ -229,6 +242,10 @@ localStorage.setItem(name, value);
 
       overrideConsole();
       addListeners();
+
+      if (localStorage) {
+        editor.value = localStorage.getItem('previousProject');
+      }
 
       // Initialize editor padding and subsequently add the first line number
       editorChanged();
