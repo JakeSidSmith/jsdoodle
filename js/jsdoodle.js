@@ -90,10 +90,6 @@
   };
 
   var pushToIframe = function () {
-    if (localStorage) {
-      localStorage.setItem('previousProject', editor.value);
-    }
-
     iframe.addEventListener('load', iframeLoaded);
 
     iframeWindow.location.reload();
@@ -107,6 +103,10 @@
   };
 
   var editorChanged = function () {
+    if (localStorage) {
+      localStorage.setItem('previousProject', editor.value);
+    }
+    
     var lineCount = editor.value.split(/\n|\r|\r\n|\n\r/).length;
 
     if (lineCount < lineNumberCount) {
