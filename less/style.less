@@ -1,18 +1,22 @@
 // out:../css/style.css, compress:true
 
-@White: #FFFFFF;
+@White: #FFF;
 @FontColor: #333;
 @EditorFontColor: #DDD;
 @EditorBackground: #222;
 @LineNumberColor: #777;
 @BorderColor: #CCC;
+@ControlBarColor: #EEE;
 
 @InfoBlue: #5599ee;
 @WarnOrange: #EEAA55;
 @ErrorRed: #EE5555;
 
+@BaseFontSize: 14px;
+@MonoFontSize: 12px;
 @ConsoleHeight: 100%;
 @PaddingSize: 8px;
+@ControlBarHeight: 24px;
 
 .transition(@value) {
   -webkit-transition: @value;
@@ -34,7 +38,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: arial, helvetica, sans-serif;
-  font-size: 14px;
+  font-size: @BaseFontSize;
   color: @FontColor;
 }
 
@@ -42,6 +46,66 @@ html, body {
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.control-bar {
+  position: absolute;
+  width: 100%;
+  height: @ControlBarHeight;
+  background-color: @ControlBarColor;
+  border-top: 1px solid @BorderColor;
+  border-bottom: 1px solid @BorderColor;
+  left: 0;
+  top: -@ControlBarHeight;
+  font-family: arial, helvetica, sans-serif;
+  color: @FontColor;
+  font-size: @MonoFontSize;
+
+  .btn {
+    padding: @PaddingSize / 2;
+    cursor: pointer;
+  }
+
+  .console-toggle {
+    .errors {
+      color: @ErrorRed;
+    }
+  }
+
+  .icon {
+    float: right;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-size: auto auto;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    margin-top: -1px;
+
+    &.toggle {
+      background-image: url(../img/icon-toggle-up.png);
+    }
+
+    &.run {
+      background-image: url(../img/icon-run.png);
+    }
+
+    &.clear {
+      background-image: url(../img/icon-clear.png);
+    }
+  }
+}
+
+.settings-active, .console-active {
+  .control-bar {
+    top: 0;
+
+    .icon {
+      &.toggle {
+        background-image: url(../img/icon-toggle-down.png);
+      }
+    }
+  }
 }
 
 .container {
@@ -81,7 +145,7 @@ html, body {
 
 .editor-text {
   font-family: monospace, monospaced;
-  font-size: 14px;
+  font-size: @MonoFontSize;
 }
 
 .editor {
@@ -97,55 +161,6 @@ html, body {
   min-width: 100%;
   min-height: 100%;
   padding-bottom: @PaddingSize * 4;
-}
-
-.editor-container {
-
-  .settings {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 100%;
-    left: 0;
-    padding: @PaddingSize;
-    padding-top: @PaddingSize * 4;
-    background-color: @White;
-    .transition(ease-in-out 0.2s top);
-
-    .settings-run {
-      position: absolute;
-      top: -@PaddingSize * 4;
-      padding: @PaddingSize;
-      color: @EditorFontColor;
-    }
-
-    .settings-button {
-      .settings-run;
-      left: 0;
-    }
-
-    .run-button {
-      .settings-run;
-      right: 0;
-    }
-  }
-
-  &.settings-active {
-    .settings {
-      top: 0;
-    }
-
-    .settings-run {
-      top: 0;
-      color: @FontColor;
-    }
-
-    .settings-button,
-    .run-button {
-      .settings-run;
-    }
-  }
-
 }
 
 .iframe {
@@ -167,7 +182,7 @@ html, body {
     padding-top: @PaddingSize * 4;
     overflow: visible;
     font-family: monospace, monospaced;
-    font-size: 14px;
+    font-size: @MonoFontSize;
     line-height: 16px;
     .transition(ease-in-out 0.2s top);
 
@@ -176,20 +191,6 @@ html, body {
       width: 100%;
       height: 100%;
       overflow: auto;
-    }
-
-    .console-toggle {
-      position: absolute;
-      bottom: @ConsoleHeight;
-      top: -@PaddingSize * 4;
-      right: 0;
-      padding: @PaddingSize;
-      color: @FontColor;
-      font-family: arial, helvetica, sans-serif;
-
-      .errors {
-        color: @ErrorRed;
-      }
     }
 
     p {
@@ -226,23 +227,30 @@ html, body {
   &.console-active {
     .console-container {
       top: 0;
-
-      .console-toggle {
-        top: 0;
-        color: @EditorFontColor;
-      }
     }
   }
 
 }
 
-.clear-console {
-  position: absolute;
-  padding: @PaddingSize;
-  top: 0;
-  left: 0;
-  font-family: arial, helvetica, sans-serif;
-  color: @EditorFontColor;
+.editor-container {
+
+  .settings-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    left: 0;
+    padding: @PaddingSize;
+    padding-top: @PaddingSize * 4;
+    background-color: @White;
+    .transition(ease-in-out 0.2s top);
+  }
+
+  &.settings-active {
+    .settings-container {
+      top: 0;
+    }
+  }
 }
 
 .line-numbers-container {
@@ -265,8 +273,6 @@ html, body {
   }
 }
 
-
-
 @media all and (min-width: 768px) {
 
   .container {
@@ -288,4 +294,12 @@ html, body {
     right: 0;
   }
 
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
 }

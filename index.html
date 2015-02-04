@@ -20,9 +20,17 @@
         </div>
       </div>
 
-      <div class="settings">
-        <div id="settings-button" class="settings-button" title="Configure settings">Settings</div>
-        <div id="run-button" class="run-button" title="Execute your script">Run</div>
+      <div class="settings-container">
+        <div class="control-bar">
+          <div id="settings-button" class="settings-button btn pull-left" title="Configure settings">
+            Settings
+            <span class="icon toggle"></span>
+          </div>
+          <div id="run-button" class="run-button btn pull-right" title="Execute your script">
+            Run
+            <span class="icon run"></span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -31,11 +39,17 @@
 
       <div id="console-container" class="console-container">
         <div id="console" class="console"></div>
-        <div id="console-toggle" class="console-toggle" title="View console">
-          <span id="errors" class="errors"></span>
-          Console
+        <div class="control-bar">
+          <div id="clear-console" class="clear-console btn pull-left">
+            Clear
+            <span class="icon clear"></span>
+          </div>
+          <div id="console-toggle" class="console-toggle btn pull-right" title="View console">
+            <span id="errors" class="errors"></span>
+            Console
+            <span class="icon toggle"></span>
+          </div>
         </div>
-        <div id="clear-console" class="clear-console">Clear</div>
       </div>
     </div>
 
