@@ -1,16 +1,33 @@
 'use strict';
 
-/* NOTES
-
-localStorage.setItem(name, value);
-
-*/
-
 (function () {
 
-  var editor, lineNumbers, runButton, iframe, iframeDocument, iframeWindow, jsConsole, consoleCopies, clearConsoleButton;
+  var editor,
+  editorContainer,
+  lineNumbers,
+  runButton,
+  settingsButton,
+  iframeContainer,
+  iframe,
+  iframeDocument,
+  iframeWindow,
+  jsConsole,
+  consoleCopies,
+  clearConsoleButton,
+  consoleToggle,
+  errors;
 
+  var errorCount = 0;
   var lineNumberCount = 0;
+
+  var setErrorCount = function (value) {
+    errorCount = value;
+    if (errorCount) {
+      errors.innerHTML = errorCount;
+    } else {
+      errors.innerHTML = '';
+    }
+  };
 
   // Faster innerHTML replacement
   var replaceHTML = function (element, html) {
@@ -56,15 +73,28 @@ localStorage.setItem(name, value);
     lineNumberCount -= number;
   };
 
-  var pushToIframe = function () {
-    iframeDocument.body.innerHTML = '';
-    iframeDocument.head.innerHTML = '';
+  var iframeLoaded = function () {
+    iframe.removeEventListener('load', iframeLoaded);
+
+    iframeWindow = iframe.contentWindow || iframe;
+    iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+    addIframeListeners();
+    overrideConsole();
 
     var script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
     script.innerHTML = editor.value;
 
     iframeDocument.body.insertBefore(script, undefined);
+  };
+
+  var pushToIframe = function () {
+    removeIframeListeners();
+    
+    iframe.addEventListener('load', iframeLoaded);
+
+    iframeWindow.location.reload();
   };
 
   var ctrlAndEnter = function (event) {
@@ -75,6 +105,10 @@ localStorage.setItem(name, value);
   };
 
   var editorChanged = function () {
+    if (localStorage) {
+      localStorage.setItem('previousProject', editor.value);
+    }
+
     var lineCount = editor.value.split(/\n|\r|\r\n|\n\r/).length;
 
     if (lineCount < lineNumberCount) {
@@ -87,7 +121,12 @@ localStorage.setItem(name, value);
   };
 
   var clearConsole = function () {
+    setErrorCount(0);
     jsConsole.innerHTML = '';
+
+    if (window.console.clear) {
+      window.console.clear();
+    }
   };
 
   var argsToArray = function (args) {
@@ -106,6 +145,10 @@ localStorage.setItem(name, value);
         log.setAttribute('class', type);
         log.innerHTML = arg;
         jsConsole.insertBefore(log, undefined);
+      }
+
+      if (type === 'error') {
+        setErrorCount(errorCount + 1);
       }
 
       jsConsole.scrollTop = jsConsole.scrollHeight;
@@ -133,6 +176,50 @@ localStorage.setItem(name, value);
     iframeWindow.console.error(event.message + lineNumber);
   };
 
+  var hasClass = function (element, className) {
+    var classes = element.getAttribute('class').toLowerCase().split(/\s+/gi);
+    return classes.indexOf(className.toLowerCase()) >= 0;
+  };
+
+  var removeClass = function (element, className) {
+    var classes = element.getAttribute('class');
+    var regEx = new RegExp('(\\s+|^)' + className + '(\\s+|$)', 'i');
+    classes = classes.replace(regEx, '');
+    element.setAttribute('class', classes);
+  };
+
+  var addClass = function (element, className) {
+    var classes = element.getAttribute('class').toLowerCase().split(/\s+/gi);
+    classes.push(className.toLowerCase());
+    element.setAttribute('class', classes.join(' '));
+  };
+
+  var toggleConsole = function () {
+    if (hasClass(iframeContainer, 'console-active')) {
+      removeClass(iframeContainer, 'console-active');
+    } else {
+      addClass(iframeContainer, 'console-active');
+    }
+  };
+
+  var toggleSettings = function () {
+    if (hasClass(editorContainer, 'settings-active')) {
+      removeClass(editorContainer, 'settings-active');
+    } else {
+      addClass(editorContainer, 'settings-active');
+    }
+  };
+
+  var removeIframeListeners = function () {
+    iframeWindow.removeEventListener('keypress', ctrlAndEnter);
+    iframeWindow.removeEventListener('error', handleRuntimeError);
+  };
+
+  var addIframeListeners = function () {
+    iframeWindow.addEventListener('keypress', ctrlAndEnter);
+    iframeWindow.addEventListener('error', handleRuntimeError);
+  };
+
   var addListeners = function () {
     editor.addEventListener('scroll', function () {
       lineNumbers.style.marginTop = - editor.scrollTop + 'px';
@@ -140,26 +227,36 @@ localStorage.setItem(name, value);
     editor.addEventListener('change', editorChanged);
     editor.addEventListener('input', editorChanged);
     runButton.addEventListener('click', pushToIframe);
+    settingsButton.addEventListener('click', toggleSettings);
     clearConsoleButton.addEventListener('click', clearConsole);
     window.addEventListener('keypress', ctrlAndEnter);
-    iframeWindow.addEventListener('keypress', ctrlAndEnter);
-    iframeWindow.addEventListener('error', handleRuntimeError);
+    consoleToggle.addEventListener('click', toggleConsole);
+    addIframeListeners();
   };
 
 
   var jsdoodle = {
     init: function () {
       editor = document.getElementById('editor');
+      editorContainer = document.getElementById('editor-container');
       lineNumbers = document.getElementById('line-numbers');
       runButton = document.getElementById('run-button');
+      settingsButton = document.getElementById('settings-button');
+      iframeContainer = document.getElementById('iframe-container');
       iframe = document.getElementById('iframe');
       jsConsole = document.getElementById('console');
       clearConsoleButton = document.getElementById('clear-console');
+      consoleToggle = document.getElementById('console-toggle');
+      errors = document.getElementById('errors');
       iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
       iframeWindow = iframe.contentWindow || iframe;
 
       overrideConsole();
       addListeners();
+
+      if (localStorage) {
+        editor.value = localStorage.getItem('previousProject');
+      }
 
       // Initialize editor padding and subsequently add the first line number
       editorChanged();

@@ -1,0 +1,32 @@
+{
+  "name": "jsdoodle",
+  "version": "0.0.0",
+  "description": "Simple javascript editor",
+  "main": "js/index.js",
+  "scripts": {
+    "start": "http-server . -c-1 -o",
+    "build": "mkdir -p css && lessc less/style.less css/style.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeSidSmith/jsdoodle.git"
+  },
+  "keywords": [
+    "jsdoodle",
+    "jsfiddle",
+    "editor",
+    "text",
+    "node"
+  ],
+  "author": "Jake 'Sid' Smith",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JakeSidSmith/jsdoodle/issues"
+  },
+  "homepage": "https://github.com/JakeSidSmith/jsdoodle#readme",
+  "devDependencies": {
+    "http-server": "^0.8.5",
+    "less": "^2.5.3"
+  }
+}
