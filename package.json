@@ -6,6 +6,7 @@
   "scripts": {
     "start": "http-server . -c-1 -o",
     "build": "mkdir -p css && lessc less/style.less css/style.css",
+    "watch": "watch 'npm run build' less/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,6 +28,7 @@
   "homepage": "https://github.com/JakeSidSmith/jsdoodle#readme",
   "devDependencies": {
     "http-server": "^0.8.5",
-    "less": "^2.5.3"
+    "less": "^2.5.3",
+    "watch": "^0.16.0"
   }
 }
